@@ -19,11 +19,11 @@ const userSchema = new mongoose.Schema({
   },
   canView: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'todos'
+    ref: 'ToDo'
   }],
   canEdit: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'todos'
+    ref: 'ToDo'
   }]
 });
 

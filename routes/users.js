@@ -30,13 +30,13 @@ router.post('/delete', async (req, res) => {
 })
 
 router.get('/canView', async (req, res) => {
-  let list = await User.findById(req.body.todoid).populate('todos').select('canView');
+  let list = await User.findById(req.body.userID).populate('canView').select('canView -_id');
   if (!list) return res.status(400).send('User doesnt exist');
   return res.send(list);
 })
 
 router.get('/canEdit', async (req, res) => {
-  let list = await User.findById(req.body._id).populate('todos').select('canEdit');
+  let list = await User.findById(req.body._id).populate('canEdit').select('canEdit -_id');
   if (!list) return res.status(400).send('User doesnt exist');
   return res.send(list);
 })
