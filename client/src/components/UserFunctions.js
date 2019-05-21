@@ -80,3 +80,47 @@ export const deleteTodo = _id => {
             console.log(err)
         })
 }
+
+export const grantView = data => {
+    return axios
+        .post('/users/grantView', {
+            id: data.id,
+            email: data.email
+        })
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+
+export const grantEdit = data => {
+    return axios
+        .post('/users/grantEdit', {
+            id: data.id,
+            email: data.email
+        })
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const edit = data => {
+    return axios
+        .post('/users/edit', {
+            id: data.id,
+            text: data.text,
+            priority: data.priority
+        })
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}

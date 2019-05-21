@@ -26,6 +26,7 @@ class View extends Component {
         this.setState({
           list: temp
         })
+        console.log(res);
       }
     })
   }

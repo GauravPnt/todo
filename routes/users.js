@@ -43,15 +43,26 @@ router.post('/canEdit', async (req, res) => {
   return res.send(list);
 })
 
+router.post('/edit', async (req, res) => {
+  let todo = await ToDo.findById(req.body.id);
+  todo.text = req.body.text;
+  todo.priority = req.body.priority;
+  await todo.save();
+})
+
 router.post('/grantView', async (req, res) => {
-  let user = await User.find({ email: req.body.email });
-  user.canView.push(req.body.id);
+  let user = await User.findOne({ email: req.body.email });
+  if (!user) res.status(403).send("User doesnt exit");
+  user.canView.push(mongoose.Types.ObjectId(req.body.id));
   await user.save();
 })
 
 router.post('/grantEdit', async (req, res) => {
-  let user = await User.find({ email: req.body.email });
-  user.canEdit.push(req.body.id);
+  let user = await User.findOne({ email: req.body.email });
+  if (!user) res.status(403).send("User doesnt exit");
+  user.canView.push(mongoose.Types.ObjectId(req.body.id));
+  user.canEdit.push(mongoose.Types.ObjectId(req.body.id));
+  console.log('works');
   await user.save();
 })
 

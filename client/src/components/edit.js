@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import *as jwt_decode from 'jwt-decode'
-import { editTodo, createTodo, deleteTodo } from './UserFunctions';
+import { editTodo, createTodo, deleteTodo, grantEdit, grantView, edit } from './UserFunctions';
 
 class View extends Component {
   constructor() {
@@ -10,6 +10,7 @@ class View extends Component {
       list: [],
       tempText: '',
       tempPriority: 0,
+      slectedID: '',
       option: 0
     }
   }
@@ -21,18 +22,50 @@ class View extends Component {
   onSubmit = (e) => {
     e.preventDefault()
 
-    const todo = {
-      senderID: this.state.id,
-      text: this.state.tempText,
-      priority: this.state.tempPriority
+    if (e.target.id == 0) {
+      const todo = {
+        senderID: this.state.id,
+        text: this.state.tempText,
+        priority: this.state.tempPriority
+      }
+
+      createTodo(todo).then(res => {
+        return;
+      })
     }
 
-    createTodo(todo).then(res => {
-      this.setState({
-        list: [...this.state.list, ...res]
-      });
-    })
+    if (e.target.id == 1) {
+      const todo = {
+        id: this.state.slectedID,
+        text: this.state.tempText,
+        priority: this.state.tempPriority
+      }
 
+      edit(todo).then(res => {
+        return;
+      })
+    }
+
+    if (e.target.id == 2) {
+      const todo = {
+        id: this.state.slectedID,
+        email: this.state.tempText
+      }
+      grantView(todo).then(res => {
+        return;
+      })
+    }
+
+    if (e.target.id == 3) {
+      const todo = {
+        id: this.state.slectedID,
+        email: this.state.tempText
+      }
+
+      grantEdit(todo).then(res => {
+        return;
+      })
+    }
     window.location.reload();
   }
 
@@ -64,8 +97,13 @@ class View extends Component {
     })
   }
 
-  edit = () => {
-
+  choose = (e) => {
+    this.setState({
+      option: e.target.id,
+      tempText: e.currentTarget.dataset.text,
+      tempPriority: e.currentTarget.dataset.priority,
+      slectedID: e.currentTarget.dataset.id
+    })
   }
 
   render() {
@@ -89,38 +127,95 @@ class View extends Component {
                       <td>{todo.text}</td>
                       <td>{todo.priority}</td>
                       <td><button id={todo._id} onClick={this.deletetodo}>Delete</button></td>
-                      <td><button id={todo._id} onClick={this.edit}>Edit</button></td>
-                      <td><button id={todo._id} onClick={this.edit}>Grant Edit</button></td>
-                      <td><button id={todo._id} onClick={this.edit}>Grant View</button></td>
+                      <td><button id={1} data-id={todo._id} data-text={todo.text} data-priority={todo.priority} onClick={this.choose}>Edit</button></td>
+                      <td><button id={2} data-id={todo._id} onClick={this.choose}>Grant View</button></td>
+                      <td><button id={3} data-id={todo._id} onClick={this.choose}>Grant Edit</button></td>
                     </tr>)
                 })
               }
             </tbody>
           </table>
-          <form noValidate onSubmit={this.onSubmit}>
-            <h1 className="h3 mb-3 font-weight-normal">Create New</h1>
-            <div className="form-group">
-              <label htmlFor="tempText">ToDo</label>
-              <input type="text"
-                className="form-control"
-                name="tempText"
-                placeholder="Enter ToDo"
-                value={this.state.tempText}
-                onChange={this.onChange} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="tempPriority">Priority</label>
-              <input type="text"
-                className="form-control"
-                name="tempPriority"
-                placeholder="Enter Priority"
-                value={this.state.tempPriority}
-                onChange={this.onChange} />
-            </div>
-            <button type="submit" className="btn btn-lg btn-primary btn-block">
-              Create
+          {this.state.option == 0 &&
+            <form noValidate id={0} onSubmit={this.onSubmit}>
+              <h1 className="h3 mb-3 font-weight-normal">Create New</h1>
+              <div className="form-group">
+                <label htmlFor="tempText">ToDo</label>
+                <input type="text"
+                  className="form-control"
+                  name="tempText"
+                  placeholder="Enter ToDo"
+                  value={this.state.tempText}
+                  onChange={this.onChange} />
+              </div>
+              <div className="form-group">
+                <label htmlFor="tempPriority">Priority</label>
+                <input type="text"
+                  className="form-control"
+                  name="tempPriority"
+                  placeholder="Enter Priority"
+                  value={this.state.tempPriority}
+                  onChange={this.onChange} />
+              </div>
+              <button type="submit" className="btn btn-lg btn-primary btn-block">
+                Create
             </button>
-          </form>
+            </form>}
+          {this.state.option == 1 &&
+            <form noValidate id={1} onSubmit={this.onSubmit}>
+              <h1 className="h3 mb-3 font-weight-normal">Edit</h1>
+              <div className="form-group">
+                <label htmlFor="tempText">ToDo</label>
+                <input type="text"
+                  className="form-control"
+                  name="tempText"
+                  placeholder={this.state.alt}
+                  value={this.state.tempText}
+                  onChange={this.onChange} />
+              </div>
+              <div className="form-group">
+                <label htmlFor="tempPriority">Priority</label>
+                <input type="text"
+                  className="form-control"
+                  name="tempPriority"
+                  placeholder={this.state.altp}
+                  value={this.state.tempPriority}
+                  onChange={this.onChange} />
+              </div>
+              <button type="submit" className="btn btn-lg btn-primary btn-block">
+                Edit
+            </button>
+            </form>}
+          {this.state.option == 2 &&
+            <form noValidate id={2} onSubmit={this.onSubmit}>
+              <h1 className="h3 mb-3 font-weight-normal">Grant View</h1>
+              <div className="form-group">
+                <label htmlFor="tempText">User Email</label>
+                <input type="text"
+                  className="form-control"
+                  name="tempText"
+                  placeholder="Enter User Email"
+                  value={this.state.tempText}
+                  onChange={this.onChange} />
+              </div>
+              <button type="submit" className="btn btn-lg btn-primary btn-block">
+                Grant permission
+            </button>
+            </form>}{this.state.option == 3 &&
+              <form noValidate id={3} onSubmit={this.onSubmit}>
+                <h1 className="h3 mb-3 font-weight-normal">Grant Edit</h1>
+                <div className="form-group">
+                  <label htmlFor="tempText">User Email</label>
+                  <input type="text"
+                    className="form-control"
+                    name="tempText"
+                    placeholder="Enter User Email"
+                    value={this.state.tempText}
+                    onChange={this.onChange} />
+                </div>
+                <button type="submit" className="btn btn-lg btn-primary btn-block">
+                  Grant permission
+            </button>
+              </form>}
         </div>
       </div>
     )
