@@ -20,10 +20,13 @@ class View extends Component {
     })
 
     viewTodo(decoded._id).then(res => {
-      if (res)
+      if (res) {
+        let temp = res.canView;
+        temp.sort((a, b) => a.priority - b.priority)
         this.setState({
-          list: res
+          list: temp
         })
+      }
     })
   }
 
@@ -32,15 +35,24 @@ class View extends Component {
       <div className="container">
         <div className="jumbotron mt-5">
           <div className="col-sm-8 mx-auto">
-            <h1 className="text-center">PROFILE</h1>
+            <h1 className="text-center">Can View</h1>
           </div>
           <table className="table col-md-6 mx-auto">
             <tbody>
-              {this.state.list.map((todo, i) => {
-                <tr>
-                  <td key={i}>{todo}</td>
-                </tr>
-              })}
+              <tr>
+                <td>Name</td>
+                <td>Priority</td>
+                <td></td>
+              </tr>
+              {
+                this.state.list.map((todo, i) => {
+                  return (
+                    <tr key={i}>
+                      <td>{todo.text}</td>
+                      <td>{todo.priority}</td>
+                    </tr>)
+                })
+              }
             </tbody>
           </table>
         </div>

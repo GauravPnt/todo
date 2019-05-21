@@ -11,9 +11,10 @@ router.post('/add', async (req, res) => {
   const newTodo = new ToDo(_.pick(req.body, ['text', 'priority']));
   try {
     await newTodo.save();
-    let user = await User.findById(req.body.userID);
+    let user = await User.findById(req.body.userId);
     if (!user) return;
     user.canView.push(newTodo._id);
+    user.canEdit.push(newTodo._id);
     await user.save();
   } catch (error) {
     console.log(error);
@@ -22,6 +23,7 @@ router.post('/add', async (req, res) => {
 })
 
 router.post('/delete', async (req, res) => {
+  console.log(req.body);
   const todo = await ToDo.findById(req.body.todoid);
   if (!todo)
     return res.status(400).send('Todo not found');
@@ -29,25 +31,25 @@ router.post('/delete', async (req, res) => {
   return res.send('Success');
 })
 
-router.get('/canView', async (req, res) => {
-  let list = await User.findById(req.body.userID).populate('canView').select('canView -_id');
+router.post('/canView', async (req, res) => {
+  let list = await User.findById(req.body._id).populate('canView').select('canView -_id');
   if (!list) return res.status(400).send('User doesnt exist');
   return res.send(list);
 })
 
-router.get('/canEdit', async (req, res) => {
+router.post('/canEdit', async (req, res) => {
   let list = await User.findById(req.body._id).populate('canEdit').select('canEdit -_id');
   if (!list) return res.status(400).send('User doesnt exist');
   return res.send(list);
 })
 
-router.get('/grantView', async (req, res) => {
+router.post('/grantView', async (req, res) => {
   let user = await User.find({ email: req.body.email });
   user.canView.push(req.body.id);
   await user.save();
 })
 
-router.get('/grantEdit', async (req, res) => {
+router.post('/grantEdit', async (req, res) => {
   let user = await User.find({ email: req.body.email });
   user.canEdit.push(req.body.id);
   await user.save();

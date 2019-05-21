@@ -44,7 +44,20 @@ export const createTodo = todo => {
 
 export const viewTodo = _id => {
     return axios
-        .get('/users/canView', {
+        .post('/users/canView', {
+            _id: _id
+        })
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
+export const editTodo = _id => {
+    return axios
+        .post('/users/canEdit', {
             _id: _id
         })
         .then(res => {
@@ -57,7 +70,7 @@ export const viewTodo = _id => {
 
 export const deleteTodo = _id => {
     return axios
-        .get('/users/delete', {
+        .post('/users/delete', {
             todoid: _id
         })
         .then(res => {
