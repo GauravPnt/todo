@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 
+// Top Sticky Navbar
 class Navbar extends Component {
     logOut(e) {
         e.preventDefault()

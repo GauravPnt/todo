@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+// ******** USER FUNCTIONS ********
+
 export const register = newUser => {
     return axios
         .post('users/register', {
@@ -26,6 +28,8 @@ export const login = user => {
             console.log(err)
         })
 }
+
+// ******** TODO FUNCTIONALITY ********
 
 export const createTodo = todo => {
     return axios

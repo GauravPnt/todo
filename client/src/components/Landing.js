@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 
+// Welcome Page
 class Landing extends Component {
-    render () {
+    render() {
         return (
             <div className="container">
                 <div className="jumbotron mt-5">

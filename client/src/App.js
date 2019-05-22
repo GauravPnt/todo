@@ -9,6 +9,7 @@ import Profile from './components/Profile'
 import View from './components/view'
 import Edit from './components/edit'
 
+// Define all client routes
 class App extends Component {
   render() {
     return (

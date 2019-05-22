@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { login } from './UserFunctions'
 
+// Login User
 class Login extends Component {
     constructor() {
         super()
@@ -12,11 +13,13 @@ class Login extends Component {
         this.onSubmit = this.onSubmit.bind(this)
     }
 
-    onChange (e) {
+    // Track Controlled forms inputs
+    onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    onSubmit (e) {
+    // Submit form to client
+    onSubmit(e) {
         e.preventDefault()
 
         const user = {
@@ -24,6 +27,7 @@ class Login extends Component {
             password: this.state.password
         }
 
+        // Verify user on client, reroute to Profile
         login(user).then(res => {
             if (res) {
                 this.props.history.push(`/profile`)
@@ -31,7 +35,7 @@ class Login extends Component {
         })
     }
 
-    render () {
+    render() {
         return (
             <div className="container">
                 <div className="row">

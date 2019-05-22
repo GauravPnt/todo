@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { register } from './UserFunctions'
 
+// Register new User
 class Register extends Component {
     constructor() {
         super()
@@ -13,10 +14,12 @@ class Register extends Component {
         this.onSubmit = this.onSubmit.bind(this)
     }
 
+    // Track Controlled forms inputs
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
     }
 
+    // Submit form to the client
     onSubmit(e) {
         e.preventDefault()
 
@@ -26,6 +29,7 @@ class Register extends Component {
             password: this.state.password
         }
 
+        // Register on client and reroute to login screen
         register(user).then(res => {
             this.props.history.push(`/login`)
         })

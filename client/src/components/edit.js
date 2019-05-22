@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import *as jwt_decode from 'jwt-decode'
 import { editTodo, createTodo, deleteTodo, grantEdit, grantView, edit } from './UserFunctions';
 
-class View extends Component {
+// Edit Todo list
+class Edit extends Component {
   constructor() {
     super()
     this.state = {
@@ -15,13 +16,16 @@ class View extends Component {
     }
   }
 
+  // Track Controlled forms inputs
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  // Submit form to client, form is common for new creates, edits, granting view and granting edits based on target id
   onSubmit = (e) => {
     e.preventDefault()
 
+    // Create new Todo
     if (e.target.id == 0) {
       const todo = {
         senderID: this.state.id,
@@ -34,6 +38,7 @@ class View extends Component {
       })
     }
 
+    // Edit current Todo
     if (e.target.id == 1) {
       const todo = {
         id: this.state.slectedID,
@@ -46,16 +51,19 @@ class View extends Component {
       })
     }
 
+    // Grant view permission
     if (e.target.id == 2) {
       const todo = {
         id: this.state.slectedID,
         email: this.state.tempText
       }
+
       grantView(todo).then(res => {
         return;
       })
     }
 
+    // Grant edit permission
     if (e.target.id == 3) {
       const todo = {
         id: this.state.slectedID,
@@ -66,9 +74,12 @@ class View extends Component {
         return;
       })
     }
+
+    // Reload Window for changes
     window.location.reload();
   }
 
+  // Delete Todo 
   deletetodo = (e) => {
     deleteTodo(e.target.id);
     this.setState({
@@ -86,6 +97,7 @@ class View extends Component {
       id: decoded._id
     })
 
+    // Print Todo list on screen sorted acc to priority
     editTodo(decoded._id).then(res => {
       if (res) {
         let temp = res.canEdit;
@@ -97,6 +109,7 @@ class View extends Component {
     })
   }
 
+  // Decides what form is taking value as input
   choose = (e) => {
     this.setState({
       option: e.target.id,
@@ -222,4 +235,4 @@ class View extends Component {
   }
 }
 
-export default View
+export default Edit

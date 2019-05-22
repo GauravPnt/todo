@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import *as jwt_decode from 'jwt-decode'
 
+// Show Users Profile
 class Profile extends Component {
     constructor() {
         super()

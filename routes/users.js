@@ -6,6 +6,8 @@ const router = express.Router();
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 
+// ******** TODO ROUTES ********
+
 router.post('/add', async (req, res) => {
   console.log(req.body);
   const newTodo = new ToDo(_.pick(req.body, ['text', 'priority']));
@@ -65,6 +67,8 @@ router.post('/grantEdit', async (req, res) => {
   console.log('works');
   await user.save();
 })
+
+// ******** USER ROUTES ********
 
 router.post('/register', async (req, res) => {
   const { error } = validate(req.body);

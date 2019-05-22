@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import *as jwt_decode from 'jwt-decode'
 import { viewTodo } from './UserFunctions';
 
+// View Todos
 class View extends Component {
   constructor() {
     super()
@@ -19,6 +20,7 @@ class View extends Component {
       id: decoded._id
     })
 
+    // Get todos from server and sort them acc to priority
     viewTodo(decoded._id).then(res => {
       if (res) {
         let temp = res.canView;
